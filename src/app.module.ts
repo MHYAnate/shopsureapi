@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CorsMiddleware } from './common/middleware/cors.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { LocationsModule } from './locations/locations.module';
@@ -11,13 +12,10 @@ import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
-    // Configuration
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    
-    // Database
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -25,8 +23,6 @@ import { UploadsModule } from './uploads/uploads.module';
       }),
       inject: [ConfigService],
     }),
-    
-    // Feature modules
     AuthModule,
     UsersModule,
     LocationsModule,
@@ -36,4 +32,8 @@ import { UploadsModule } from './uploads/uploads.module';
     UploadsModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorsMiddleware).forRoutes('*');
+  }
+}
