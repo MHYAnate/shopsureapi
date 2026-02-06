@@ -13,17 +13,24 @@ async function bootstrap() {
   const apiPrefix = configService.get<string>('API_PREFIX') || 'api/v1';
   app.setGlobalPrefix(apiPrefix);
   
-  // CORS
-  // app.enableCors({
-  //   origin: [
-  //     configService.get<string>('FRONTEND_URL') || 'http://localhost:3000',
-  //     'https://*.vercel.app',
-  //     'http://localhost:3000',
-  //   ],
-  //   credentials: true,
-  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  //   allowedHeaders: ['Content-Type', 'Authorization'],
-  // });
+  // CORS - Must be before other middleware
+  app.enableCors({
+    origin: true, // Allow all origins, or specify your frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'Accept',
+      'Origin',
+      'Access-Control-Request-Method',
+      'Access-Control-Request-Headers',
+    ],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  });
   
   // Global pipes
   app.useGlobalPipes(
