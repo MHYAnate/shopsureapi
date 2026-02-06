@@ -14,16 +14,16 @@ async function bootstrap() {
   app.setGlobalPrefix(apiPrefix);
   
   // CORS
-  app.enableCors({
-    origin: [
-      configService.get<string>('FRONTEND_URL') || 'http://localhost:3000',
-      'https://*.vercel.app',
-      'http://localhost:3000',
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+  // app.enableCors({
+  //   origin: [
+  //     configService.get<string>('FRONTEND_URL') || 'http://localhost:3000',
+  //     'https://*.vercel.app',
+  //     'http://localhost:3000',
+  //   ],
+  //   credentials: true,
+  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  //   allowedHeaders: ['Content-Type', 'Authorization'],
+  // });
   
   // Global pipes
   app.useGlobalPipes(
