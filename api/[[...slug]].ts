@@ -16,7 +16,7 @@ async function bootstrap(): Promise<INestApplication> {
     logger: ['error', 'warn'],
   });
 
-  // CORS
+  // CORS linkinh
   app.enableCors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
