@@ -7,6 +7,14 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: '*',
+    credentials: true,
+  });
+  
   const configService = app.get(ConfigService);
   
   // Global prefix
@@ -14,17 +22,7 @@ async function bootstrap() {
   app.setGlobalPrefix(apiPrefix);
   
   // CORS
-  app.enableCors({
-    origin: [
-      configService.get<string>('FRONTEND_URL') || 'http://localhost:3000',
-      'https://*.vercel.app',
-      'http://localhost:3000',
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
-  
+
   // Global pipes
   app.useGlobalPipes(
     new ValidationPipe({
